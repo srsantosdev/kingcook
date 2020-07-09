@@ -7,6 +7,7 @@ import uploadConfig from '../config/upload';
 import Recipe from '../models/Recipe';
 
 import CreateRecipeService from '../services/CreateRecipeService';
+import ShowRecipeService from '../services/ShowRecipeService';
 
 const routes = Router();
 const upload = multer(uploadConfig);
@@ -40,12 +41,9 @@ routes.post('/', upload.single('recipe_img'), async (request, response) => {
 routes.get('/:id', async (request, response) => {
   const { id } = request.params;
 
-  const recipeRepository = getRepository(Recipe);
+  const showRecipe = new ShowRecipeService();
 
-  const recipe = await recipeRepository.findOne({
-    where: { id },
-    relations: ['ingredients', 'preparation_modes'],
-  });
+  const recipe = await showRecipe.execute({ id });
 
   return response.json(recipe);
 });

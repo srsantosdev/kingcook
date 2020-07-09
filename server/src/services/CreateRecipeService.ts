@@ -4,6 +4,8 @@ import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
 import PreparationMode from '../models/PreparationMode';
 
+import AppError from '../errors/AppError';
+
 interface Request {
   name: string;
   image_url: string;
@@ -23,6 +25,10 @@ class CreateRecipeService {
     const recipeRepository = getRepository(Recipe);
     const ingredientRepository = getRepository(Ingredient);
     const preparationModeRepository = getRepository(PreparationMode);
+
+    if (!name || !level) {
+      throw new AppError('Name and level is required to create recipes.');
+    }
 
     const serializedIngredients = ingredients
       .split(';')
