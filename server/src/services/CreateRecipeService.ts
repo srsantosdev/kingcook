@@ -8,8 +8,8 @@ interface Request {
   name: string;
   image_url: string;
   level: 'easy' | 'medium' | 'hard';
-  ingredients: string[];
-  preparation_modes: string[];
+  ingredients: string;
+  preparation_modes: string;
 }
 
 class CreateRecipeService {
@@ -24,6 +24,14 @@ class CreateRecipeService {
     const ingredientRepository = getRepository(Ingredient);
     const preparationModeRepository = getRepository(PreparationMode);
 
+    const serializedIngredients = ingredients
+      .split(';')
+      .map(ingredient => ingredient.trim());
+
+    const serializedPreparationModes = preparation_modes
+      .split(';')
+      .map(modes => modes.trim());
+
     const createdRecipe = recipeRepository.create({
       name,
       image_url,
@@ -32,19 +40,21 @@ class CreateRecipeService {
 
     await recipeRepository.save(createdRecipe);
 
-    const createdIngredients = ingredients.map(ingredient => {
+    const createdIngredients = serializedIngredients.map(ingredient => {
       return ingredientRepository.create({
         detail: ingredient,
         recipe_id: createdRecipe.id,
       });
     });
 
-    const createdPreparationModes = preparation_modes.map(preparation_mode => {
-      return preparationModeRepository.create({
-        detail: preparation_mode,
-        recipe_id: createdRecipe.id,
-      });
-    });
+    const createdPreparationModes = serializedPreparationModes.map(
+      preparation_mode => {
+        return preparationModeRepository.create({
+          detail: preparation_mode,
+          recipe_id: createdRecipe.id,
+        });
+      },
+    );
 
     await ingredientRepository.save(createdIngredients);
     await preparationModeRepository.save(createdPreparationModes);

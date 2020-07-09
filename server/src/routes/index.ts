@@ -1,42 +1,9 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
 
-import Recipe from '../models/Recipe';
-
-import CreateRecipeService from '../services/CreateRecipeService';
+import recipeRoute from './recipe.routes';
 
 const routes = Router();
 
-routes.get('/recipes', async (request, response) => {
-  const recipeRepository = getRepository(Recipe);
-
-  const recipes = await recipeRepository.find({
-    relations: ['ingredients', 'preparation_modes'],
-  });
-
-  return response.json(recipes);
-});
-
-routes.post('/recipes', async (request, response) => {
-  const {
-    name,
-    image_url,
-    level,
-    ingredients,
-    preparation_modes,
-  } = request.body;
-
-  const createRecipe = new CreateRecipeService();
-
-  const recipe = await createRecipe.execute({
-    name,
-    image_url,
-    level,
-    ingredients,
-    preparation_modes,
-  });
-
-  return response.json(recipe);
-});
+routes.use('/recipes', recipeRoute);
 
 export default routes;
