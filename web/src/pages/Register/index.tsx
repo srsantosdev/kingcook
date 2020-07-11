@@ -6,9 +6,12 @@ import { Form } from '@unform/web';
 
 import { FiCheck } from 'react-icons/fi';
 
+import Dropzone from '../../components/Dropzone';
 import Header from '../../components/Header';
 import LevelSelect from '../../components/LevelSelect';
 import InputForm, { Input } from '../../components/Input';
+
+import api from '../../services/api';
 
 import { Container, Content, Lists, BoxButton } from './styles';
 
@@ -18,6 +21,8 @@ interface Data {
 
 const Register: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+
+  const [selectedFile, setSeletedFile] = useState<File>();
 
   const [ingredientValue, setIngredientValue] = useState('');
   const [preparationValue, setPreparationValue] = useState('');
@@ -52,9 +57,18 @@ const Register: React.FC = () => {
         abortEarly: false,
       });
 
-      // Conexão com a API
+      data.append('name', request.name);
+      data.append('level', request.level);
+      data.append('ingredients', request.ingredients);
+      data.append('preparation_modes', request.preparation_modes);
+
+      if (selectedFile) {
+        data.append('recipe_img', selectedFile);
+      }
+
+      await api.post('/recipes', data);
     },
-    [ingredients, preparationModes, level],
+    [ingredients, preparationModes, level, selectedFile],
   );
 
   const handleAddIngredients = useCallback(() => {
@@ -77,6 +91,8 @@ const Register: React.FC = () => {
       <Content>
         <Form onSubmit={handleSubmit} ref={formRef}>
           <h1>Cadastrar nova receita</h1>
+
+          <Dropzone onFileUploaded={setSeletedFile} />
 
           <div className="group">
             <div className="field">
