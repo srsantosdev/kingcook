@@ -23,6 +23,7 @@ export const Recipes = styled.div`
       width: 100%;
       height: 178px;
       border-radius: 15px 15px 0px 0px;
+      object-fit: cover;
     }
 
     &:hover {

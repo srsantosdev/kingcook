@@ -17,7 +17,12 @@ routes.get('/', async (_, response) => {
 
   const recipes = await recipeRepository.find();
 
-  return response.json(recipes);
+  const serializedRecipes = recipes.map(recipe => ({
+    ...recipe,
+    image_url: `http://localhost:3333/files/${recipe.image_url}`,
+  }));
+
+  return response.json(serializedRecipes);
 });
 
 routes.post('/', upload.single('recipe_img'), async (request, response) => {
@@ -45,7 +50,12 @@ routes.get('/:id', async (request, response) => {
 
   const recipe = await showRecipe.execute({ id });
 
-  return response.json(recipe);
+  const serializedRecipe = {
+    ...recipe,
+    image_url: `http://localhost:3333/files/${recipe.image_url}`,
+  };
+
+  return response.json(serializedRecipe);
 });
 
 export default routes;

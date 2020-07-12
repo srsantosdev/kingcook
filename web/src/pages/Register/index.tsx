@@ -5,11 +5,14 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 
 import { FiCheck } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 
 import Dropzone from '../../components/Dropzone';
 import Header from '../../components/Header';
 import LevelSelect from '../../components/LevelSelect';
 import InputForm, { Input } from '../../components/Input';
+
+import { useToast } from '../../hooks/toast';
 
 import api from '../../services/api';
 
@@ -21,6 +24,9 @@ interface Data {
 
 const Register: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const history = useHistory();
+
+  const { addToast } = useToast();
 
   const [selectedFile, setSeletedFile] = useState<File>();
 
@@ -67,8 +73,15 @@ const Register: React.FC = () => {
       }
 
       await api.post('/recipes', data);
+
+      addToast({
+        type: 'success',
+        title: 'Receita cadastrada com sucesso!',
+      });
+
+      history.push('/');
     },
-    [ingredients, preparationModes, level, selectedFile],
+    [ingredients, preparationModes, level, selectedFile, addToast, history],
   );
 
   const handleAddIngredients = useCallback(() => {
@@ -84,6 +97,10 @@ const Register: React.FC = () => {
       setPreparationValue('');
     }
   }, [preparationValue, preparationModes]);
+
+  const handleClick = useCallback(() => {
+    formRef.current?.submitForm();
+  }, []);
 
   return (
     <Container>
@@ -145,7 +162,7 @@ const Register: React.FC = () => {
         </Lists>
 
         <BoxButton>
-          <button type="button" onClick={() => formRef.current?.submitForm()}>
+          <button type="button" onClick={handleClick}>
             <FiCheck size={25} />
             Cadastrar Receita
           </button>

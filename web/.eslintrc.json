@@ -25,6 +25,7 @@
       "prettier"
   ],
   "rules": {
+    "react/jsx-one-expression-per-line": "off",
     "react/no-array-index-key": "off",
     "react-hooks/rules-of-hooks": "error",
     "jsx-a11y/label-has-associated-control": "off",

@@ -15,7 +15,7 @@ const Home: React.FC = () => {
         <img src={logoImg} alt="Kingcook" />
         <h1>Seu livro de receitas online.</h1>
 
-        <button type="button" onClick={() => history.push('/register')}>
+        <button type="button" onClick={() => history.push('/recipes')}>
           Ver Receitas
           <FiArrowRight size={25} />
         </button>

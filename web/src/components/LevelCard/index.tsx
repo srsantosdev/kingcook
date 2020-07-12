@@ -2,11 +2,19 @@ import React from 'react';
 
 import { Container } from './styles';
 
-const LevelCard: React.FC = () => {
+interface LevelCardProps {
+  type?: 'easy' | 'medium' | 'hard';
+}
+
+const serializedType = {
+  easy: 'Fácil',
+  medium: 'Intermediário',
+  hard: 'Difícil',
+};
+
+const LevelCard: React.FC<LevelCardProps> = ({ type }) => {
   return (
-    <Container>
-      <p>Intermediário</p>
-    </Container>
+    <Container type={type}>{type && <p>{serializedType[type]}</p>}</Container>
   );
 };
 

@@ -12,7 +12,10 @@ export const Container = styled.div`
     width: 215px;
   }
 
-  a {
+  button {
+    background: transparent;
+    border: 0;
+
     color: #343434;
     font-size: 18px;
     text-decoration: none;

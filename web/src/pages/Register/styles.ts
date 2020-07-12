@@ -13,6 +13,13 @@ export const Content = styled.div`
 
   padding: 16px;
 
+  h1 {
+    font-weight: 600;
+    font-size: 28px;
+    text-align: center;
+    color: #343434;
+  }
+
   div.group {
     display: flex;
     flex-direction: row;
